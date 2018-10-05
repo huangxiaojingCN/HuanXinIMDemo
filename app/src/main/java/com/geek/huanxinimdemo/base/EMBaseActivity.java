@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -12,9 +11,13 @@ import com.geek.huanxinimdemo.utils.Checkers;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.EMConnectionListener;
 import com.hyphenate.EMError;
+import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.NetUtils;
+
+import java.util.List;
 
 /**
  * Created by huangxiaojing on 2018/10/5.
@@ -39,6 +42,7 @@ public class EMBaseActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         EMClient.getInstance().addConnectionListener(myConnectionListener);
+        EMClient.getInstance().chatManager().addMessageListener(emMessageListener);
     }
 
     @Override
@@ -50,6 +54,7 @@ public class EMBaseActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         EMClient.getInstance().addConnectionListener(null);
+        EMClient.getInstance().chatManager().removeMessageListener(emMessageListener);
     }
 
     @Override
@@ -164,7 +169,8 @@ public class EMBaseActivity extends BaseActivity {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(EMBaseActivity.this, "连接聊天服务器成功", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(EMBaseActivity.this, "连接聊天服务器成功", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "连接聊天服务器成功");
                 }
             });
         }
@@ -191,4 +197,39 @@ public class EMBaseActivity extends BaseActivity {
         }
     }
 
+    EMMessageListener emMessageListener = new EMMessageListener() {
+
+        @Override
+        public void onMessageReceived(List<EMMessage> messages) {
+            //收到消息
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> messages) {
+            //收到透传消息
+        }
+
+        @Override
+        public void onMessageRead(List<EMMessage> messages) {
+            //收到已读回执
+        }
+
+        @Override
+        public void onMessageDelivered(List<EMMessage> message) {
+            //收到已送达回执
+        }
+        @Override
+        public void onMessageRecalled(List<EMMessage> messages) {
+            //消息被撤回
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage message, Object change) {
+            //消息状态变动
+        }
+    };
+
+    protected void onMessageReceived(List<EMMessage> messages) {
+        //收到消息
+    }
 }

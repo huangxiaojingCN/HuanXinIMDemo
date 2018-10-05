@@ -1,26 +1,31 @@
 package com.geek.huanxinimdemo;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.geek.huanxinimdemo.base.BaseActivity;
+import com.geek.huanxinimdemo.base.EMBaseActivity;
 import com.geek.huanxinimdemo.ui.LoginActivity;
-import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
 
-public class MainActivity extends BaseActivity implements BaseActivity.EMLogoutListener {
+import java.util.List;
+
+public class MainActivity extends EMBaseActivity implements BaseActivity.EMLogoutListener {
 
     EditText mMessage;
 
     EditText mUserId;
 
     Button mConversation;
+
+    TextView mReceiveMessage;
 
     Button mLogout;
 
@@ -32,6 +37,7 @@ public class MainActivity extends BaseActivity implements BaseActivity.EMLogoutL
         mMessage = findViewById(R.id.ed_message);
         mUserId = findViewById(R.id.ed_userid);
         mConversation = findViewById(R.id.btn_goMessage);
+        mReceiveMessage = findViewById(R.id.tv_receive_message);
         mLogout = findViewById(R.id.btn_logout);
 
         initListener();
@@ -73,6 +79,18 @@ public class MainActivity extends BaseActivity implements BaseActivity.EMLogoutL
     public void sendMessage(String message, String chatUserName) {
         EMMessage emMessage = EMMessage.createTxtSendMessage(message, chatUserName);
         EMClient.getInstance().chatManager().sendMessage(emMessage);
+    }
+
+    @Override
+    protected void onMessageReceived(List<EMMessage> messages) {
+       // messages.forEach(message -> {
+         //   Log.d(TAG, "onMessageReceived: " + message.getUserName() + " , " + message.getBody().toString());
+        //});
+
+        for (int i = 0; i < messages.size(); i++) {
+            EMMessage emMessage = messages.get(i);
+            Log.d(TAG, "onMessageReceived: " + emMessage.getUserName() + " , " + emMessage.getBody().toString());
+        }
     }
 
     @Override
