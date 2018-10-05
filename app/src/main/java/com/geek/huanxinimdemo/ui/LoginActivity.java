@@ -7,11 +7,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.geek.huanxinimdemo.MainActivity;
 import com.geek.huanxinimdemo.R;
+import com.geek.huanxinimdemo.base.BaseActivity;
+import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
     public static final String TAG = "LoginActivity";
 
@@ -69,6 +72,34 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
+        mLogin.setOnClickListener(v -> {
+            String userName = mUserName.getText().toString();
+            String passWord = mPassword.getText().toString();
+            if (userName.isEmpty() || passWord.isEmpty()) {
+                Toast.makeText(
+                        this,
+                        "用户名或密码不能为空!",
+                        Toast.LENGTH_SHORT).show();
+            }
 
+            EMClient.getInstance().login(userName.trim(), passWord.trim(), new EMCallBack() {
+                @Override
+                public void onSuccess() {
+                  //  Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+                    startNewActivity(LoginActivity.this, MainActivity.class);
+                    finish();
+                }
+
+                @Override
+                public void onError(int i, String s) {
+                    Toast.makeText(LoginActivity.this, "登陆失败：" + s,Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onProgress(int i, String s) {
+                    Toast.makeText(LoginActivity.this, "登陆中: " + s, Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 }
