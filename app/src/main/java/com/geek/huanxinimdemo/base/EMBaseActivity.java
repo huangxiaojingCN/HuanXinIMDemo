@@ -67,6 +67,8 @@ public class EMBaseActivity extends BaseActivity {
                     }
                 }
             });
+
+            return;
         }
 
         EMClient.getInstance().login(userName, password, new EMCallBack() {
@@ -120,6 +122,8 @@ public class EMBaseActivity extends BaseActivity {
                     }
                 }
             });
+
+            return;
         }
 
         new Thread(new Runnable() {

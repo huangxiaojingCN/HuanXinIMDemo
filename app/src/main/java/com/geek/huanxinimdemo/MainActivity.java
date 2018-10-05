@@ -12,10 +12,13 @@ import com.geek.huanxinimdemo.base.BaseActivity;
 import com.geek.huanxinimdemo.ui.LoginActivity;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
 
 public class MainActivity extends BaseActivity implements BaseActivity.EMLogoutListener {
 
     EditText mMessage;
+
+    EditText mUserId;
 
     Button mConversation;
 
@@ -27,6 +30,7 @@ public class MainActivity extends BaseActivity implements BaseActivity.EMLogoutL
         setContentView(R.layout.activity_main);
 
         mMessage = findViewById(R.id.ed_message);
+        mUserId = findViewById(R.id.ed_userid);
         mConversation = findViewById(R.id.btn_goMessage);
         mLogout = findViewById(R.id.btn_logout);
 
@@ -46,9 +50,29 @@ public class MainActivity extends BaseActivity implements BaseActivity.EMLogoutL
     }
 
     private void initListener() {
+        mConversation.setOnClickListener(v -> {
+            String message = mMessage.getText().toString();
+            String userid = mUserId.getText().toString();
+            if (message.isEmpty() || userid.isEmpty()) {
+                Toast.makeText(MainActivity.this, "聊天用户和聊天内容不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            sendMessage(message.trim(), userid.trim());
+        });
+
         mLogout.setOnClickListener(v -> {
             logoutAsync();
         });
+    }
+
+    /**
+     * 暂时只支持文字
+     */
+    public void sendMessage(String message, String chatUserName) {
+        EMMessage emMessage = EMMessage.createTxtSendMessage(message, chatUserName);
+        EMClient.getInstance().chatManager().sendMessage(emMessage);
     }
 
     @Override

@@ -7,6 +7,13 @@
     tools:context="com.geek.huanxinimdemo.MainActivity">
 
     <EditText
+        android:id="@+id/ed_userid"
+        android:hint="聊天用户"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:layout_below="@id/ed_userid"
         android:hint="发送聊天消息"
         android:id="@+id/ed_message"
         android:layout_width="match_parent"
