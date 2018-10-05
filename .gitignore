@@ -32,3 +32,8 @@ proguard/
 # Android Studio captures folder
 captures/
 
+.idea
+
+HuanXinIMDemo.iml
+
+android.iml
