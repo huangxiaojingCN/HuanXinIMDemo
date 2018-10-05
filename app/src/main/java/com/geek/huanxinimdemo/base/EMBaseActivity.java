@@ -6,11 +6,15 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.geek.huanxinimdemo.utils.Checkers;
 import com.hyphenate.EMCallBack;
+import com.hyphenate.EMConnectionListener;
+import com.hyphenate.EMError;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.exceptions.HyphenateException;
+import com.hyphenate.util.NetUtils;
 
 /**
  * Created by huangxiaojing on 2018/10/5.
@@ -22,15 +26,19 @@ public class EMBaseActivity extends BaseActivity {
 
     public Handler mainHandler = new Handler(Looper.getMainLooper());
 
+    private MyConnectionListener myConnectionListener;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        myConnectionListener = new MyConnectionListener();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        EMClient.getInstance().addConnectionListener(myConnectionListener);
     }
 
     @Override
@@ -41,6 +49,7 @@ public class EMBaseActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        EMClient.getInstance().addConnectionListener(null);
     }
 
     @Override
@@ -142,6 +151,40 @@ public class EMBaseActivity extends BaseActivity {
             }
         }).start();
 
+    }
+
+    public class MyConnectionListener implements EMConnectionListener {
+
+        @Override
+        public void onConnected() {
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(EMBaseActivity.this, "连接聊天服务器成功", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        @Override
+        public void onDisconnected(int error) {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if(error == EMError.USER_REMOVED){
+                        // 显示帐号已经被移除
+                        Toast.makeText(EMBaseActivity.this, "帐号错误", Toast.LENGTH_SHORT).show();
+                    }else if (error == EMError.USER_LOGIN_ANOTHER_DEVICE) {
+                        // 显示帐号在其他设备登录
+                        Toast.makeText(EMBaseActivity.this, "您的帐号在其他设备上登陆", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (NetUtils.hasNetwork(EMBaseActivity.this)) {
+                            Toast.makeText(EMBaseActivity.this, "网络连接异常", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+        }
     }
 
 }
