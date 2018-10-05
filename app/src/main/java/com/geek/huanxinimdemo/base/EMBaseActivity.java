@@ -65,6 +65,8 @@ public class EMBaseActivity extends BaseActivity {
         EMClient.getInstance().login(userName, password, new EMCallBack() {
             @Override
             public void onSuccess() {
+                EMClient.getInstance().groupManager().loadAllGroups();
+                EMClient.getInstance().chatManager().loadAllConversations();
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
