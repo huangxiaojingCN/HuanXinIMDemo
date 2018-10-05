@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.geek.huanxinimdemo.utils.Checkers;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
@@ -45,7 +46,18 @@ public class EMBaseActivity extends BaseActivity {
         super.onDestroy();
     }
 
-    public void login(String userName, String password) {
+    public void realLogin(String userName, String password) {
+        if (!Checkers.loginChecker(userName, password)) {
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mEMLoginListener != null) {
+                        mEMLoginListener.onArgumentFail();
+                    }
+                }
+            });
+        }
+
         EMClient.getInstance().login(userName, password, new EMCallBack() {
             @Override
             public void onSuccess() {
@@ -90,6 +102,8 @@ public class EMBaseActivity extends BaseActivity {
     }
 
     public interface EMLoginListener {
+
+        void onArgumentFail();
 
         void onSuccess();
 
