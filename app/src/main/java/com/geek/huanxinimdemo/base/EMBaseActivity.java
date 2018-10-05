@@ -232,5 +232,9 @@ public class EMBaseActivity extends BaseActivity {
 
     protected void onMsgReceived(List<EMMessage> messages) {
         //收到消息
+        for (int i = 0; i < messages.size(); i++) {
+            EMMessage emMessage = messages.get(i);
+            Log.d(TAG, "onMessageReceived: " + emMessage.getUserName() + " , " + emMessage.getBody().toString());
+        }
     }
 }
