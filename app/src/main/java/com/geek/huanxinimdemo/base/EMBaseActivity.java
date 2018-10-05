@@ -20,8 +20,6 @@ public class EMBaseActivity extends BaseActivity {
 
     public static final String TAG = "EMBaseActivity";
 
-    private EMLoginListener mEMLoginListener;
-
     public Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Override
@@ -146,22 +144,4 @@ public class EMBaseActivity extends BaseActivity {
 
     }
 
-    public interface EMLoginListener {
-
-        void onArgumentFail();
-
-        void onRegisterSuccess();
-
-        void onRegisterFail();
-
-        void onSuccess();
-
-        void onError(int i, String s);
-
-        void onProgress(int i, String s);
-    }
-
-    public void setOnEMLoginListener(EMLoginListener l) {
-        this.mEMLoginListener = l;
-    }
 }
