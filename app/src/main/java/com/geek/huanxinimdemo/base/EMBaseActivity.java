@@ -5,16 +5,20 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.geek.huanxinimdemo.utils.Checkers;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.hyphenate.exceptions.HyphenateException;
 
 /**
  * Created by huangxiaojing on 2018/10/5.
  */
 
 public class EMBaseActivity extends BaseActivity {
+
+    public static final String TAG = "EMBaseActivity";
 
     private EMLoginListener mEMLoginListener;
 
@@ -97,13 +101,56 @@ public class EMBaseActivity extends BaseActivity {
         });
     }
 
-    public void register() {
+    public void realRegister(String userName, String passWord) {
+        if (!Checkers.loginChecker(userName, passWord)) {
+            mainHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mEMLoginListener != null) {
+                        mEMLoginListener.onArgumentFail();
+                    }
+                }
+            });
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    EMClient.getInstance().createAccount(userName.trim(), passWord.trim());
+                    Log.d(TAG, "注册成功");
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mEMLoginListener != null) {
+                                mEMLoginListener.onRegisterSuccess();
+                            }
+                        }
+                    });
+                } catch (HyphenateException e) {
+                    Log.e(TAG, "注册失败 "+  e.getErrorCode() + " , " + e.getMessage());
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mEMLoginListener != null) {
+                                mEMLoginListener.onRegisterFail();
+                            }
+                        }
+                    });
+                    e.printStackTrace();
+                }
+            }
+        }).start();
 
     }
 
     public interface EMLoginListener {
 
         void onArgumentFail();
+
+        void onRegisterSuccess();
+
+        void onRegisterFail();
 
         void onSuccess();
 

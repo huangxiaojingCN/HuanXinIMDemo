@@ -59,28 +59,8 @@ public class LoginActivity extends EMBaseActivity implements EMBaseActivity.EMLo
      */
     public void register() {
         mRegister.setOnClickListener(v -> {
-            String userName = mUserName.getText().toString();
-            String passWord = mPassword.getText().toString();
-            if (userName.isEmpty() || passWord.isEmpty()) {
-                Toast.makeText(
-                        this,
-                        "用户名或密码不能为空!",
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        EMClient.getInstance().createAccount(userName.trim(), passWord.trim());
-                        Log.d(TAG, "注册成功");
-                    } catch (HyphenateException e) {
-                        Log.e(TAG, "注册失败 "+  e.getErrorCode() + " , " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-
+            realRegister(mUserName.getText().toString().trim(),
+                    mPassword.getText().toString().trim());
         });
     }
 
@@ -96,6 +76,22 @@ public class LoginActivity extends EMBaseActivity implements EMBaseActivity.EMLo
         Toast.makeText(
                 this,
                 "用户名或密码不能为空!",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRegisterSuccess() {
+        Toast.makeText(
+                this,
+                "注册成功!",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRegisterFail() {
+        Toast.makeText(
+                this,
+                "注册失败",
                 Toast.LENGTH_SHORT).show();
     }
 
