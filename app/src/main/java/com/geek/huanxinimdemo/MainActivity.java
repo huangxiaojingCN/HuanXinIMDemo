@@ -82,7 +82,7 @@ public class MainActivity extends EMBaseActivity implements BaseActivity.EMLogou
     }
 
     @Override
-    protected void onMessageReceived(List<EMMessage> messages) {
+    protected void onMsgReceived(List<EMMessage> messages) {
        // messages.forEach(message -> {
          //   Log.d(TAG, "onMessageReceived: " + message.getUserName() + " , " + message.getBody().toString());
         //});
@@ -90,6 +90,13 @@ public class MainActivity extends EMBaseActivity implements BaseActivity.EMLogou
         for (int i = 0; i < messages.size(); i++) {
             EMMessage emMessage = messages.get(i);
             Log.d(TAG, "onMessageReceived: " + emMessage.getUserName() + " , " + emMessage.getBody().toString());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mReceiveMessage.setText("");
+                    mReceiveMessage.setText(emMessage.getBody().toString());
+                }
+            });
         }
     }
 

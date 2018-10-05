@@ -202,6 +202,7 @@ public class EMBaseActivity extends BaseActivity {
         @Override
         public void onMessageReceived(List<EMMessage> messages) {
             //收到消息
+            onMsgReceived(messages);
         }
 
         @Override
@@ -229,7 +230,7 @@ public class EMBaseActivity extends BaseActivity {
         }
     };
 
-    protected void onMessageReceived(List<EMMessage> messages) {
+    protected void onMsgReceived(List<EMMessage> messages) {
         //收到消息
     }
 }
