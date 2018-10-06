@@ -318,6 +318,8 @@ public class VoiceCallActivity extends CallActivity implements OnClickListener {
                                     }
                                 }
                             }
+
+                            Toast.makeText(VoiceCallActivity.this, callStateTextView.getText(), Toast.LENGTH_SHORT).show();
                             postDelayedCloseMsg();
                         }
 
