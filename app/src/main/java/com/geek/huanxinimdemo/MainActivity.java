@@ -1,5 +1,6 @@
 package com.geek.huanxinimdemo;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.os.Bundle;
@@ -12,8 +13,10 @@ import android.widget.Toast;
 import com.geek.huanxinimdemo.base.BaseActivity;
 import com.geek.huanxinimdemo.base.EMBaseActivity;
 import com.geek.huanxinimdemo.ui.LoginActivity;
+import com.geek.huanxinimdemo.ui.VoiceCallActivity;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
+import com.hyphenate.exceptions.EMServiceNotReadyException;
 
 import java.util.List;
 
@@ -24,6 +27,10 @@ public class MainActivity extends EMBaseActivity implements BaseActivity.EMLogou
     EditText mUserId;
 
     Button mConversation;
+
+    Button mVoice;
+
+    Button mVideo;
 
     TextView mReceiveMessage;
 
@@ -37,6 +44,9 @@ public class MainActivity extends EMBaseActivity implements BaseActivity.EMLogou
         mMessage = findViewById(R.id.ed_message);
         mUserId = findViewById(R.id.ed_userid);
         mConversation = findViewById(R.id.btn_goMessage);
+        mVoice = findViewById(R.id.btn_voice);
+        mVideo = findViewById(R.id.btn_video);
+
         mReceiveMessage = findViewById(R.id.tv_receive_message);
         mLogout = findViewById(R.id.btn_logout);
 
@@ -71,6 +81,23 @@ public class MainActivity extends EMBaseActivity implements BaseActivity.EMLogou
         mLogout.setOnClickListener(v -> {
             logoutAsync();
         });
+
+        mVoice.setOnClickListener(view -> {
+            String userName = mUserId.getText().toString();
+            if (userName.isEmpty()) {
+                Toast.makeText(MainActivity.this, "聊天用户不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            makeVoiceCall(userName.trim());
+        });
+
+    }
+
+    public void makeVoiceCall(String userName) {
+        Intent intent = new Intent(MainActivity.this, VoiceCallActivity.class);
+        intent.putExtra("username", userName);
+        intent.putExtra("isComingCall", false);
+        startActivity(intent);
     }
 
     /**

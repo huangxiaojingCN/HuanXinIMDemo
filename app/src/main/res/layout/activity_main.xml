@@ -21,6 +21,20 @@
 
     <Button
         android:layout_below="@id/ed_message"
+        android:id="@+id/btn_voice"
+        android:text="语音聊天"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_below="@id/btn_voice"
+        android:id="@+id/btn_video"
+        android:text="音频聊天"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_below="@id/btn_video"
         android:text="聊天"
         android:id="@+id/btn_goMessage"
         android:layout_width="match_parent"

@@ -3,9 +3,11 @@ package com.geek.huanxinimdemo.base;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.geek.huanxinimdemo.receiver.CallReceiver;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 
@@ -57,6 +59,11 @@ public class App extends Application {
 
         //在做打包混淆时，关闭debug模式，避免消耗不必要的资源
         EMClient.getInstance().setDebugMode(true);
+
+        // 音视频通话
+        IntentFilter callFilter = new IntentFilter(EMClient.getInstance().callManager().getIncomingCallBroadcastAction());
+        CallReceiver callReceiver = new CallReceiver();
+        registerReceiver(callReceiver, callFilter);
     }
 
     private String getAppName(int pID) {
