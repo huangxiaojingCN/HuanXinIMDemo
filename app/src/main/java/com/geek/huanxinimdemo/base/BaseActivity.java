@@ -60,10 +60,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void logoutSync() {
-        EMClient.getInstance().logout(true);
+        if (EMClient.getInstance().isLoggedInBefore()) {
+            EMClient.getInstance().logout(true);
+        }
     }
 
     public void logoutAsync() {
+        if (!EMClient.getInstance().isLoggedInBefore()) {
+            return;
+        }
         EMClient.getInstance().logout(true, new EMCallBack() {
 
             @Override
