@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.geek.huanxinimdemo.base.BaseActivity;
 import com.geek.huanxinimdemo.base.EMBaseActivity;
 import com.geek.huanxinimdemo.ui.LoginActivity;
+import com.geek.huanxinimdemo.ui.VideoCallActivity;
 import com.geek.huanxinimdemo.ui.VoiceCallActivity;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -91,10 +92,28 @@ public class MainActivity extends EMBaseActivity implements BaseActivity.EMLogou
             makeVoiceCall(userName.trim());
         });
 
+
+        mVideo.setOnClickListener(view -> {
+            String userName = mUserId.getText().toString();
+            if (userName.isEmpty()) {
+                Toast.makeText(MainActivity.this, "聊天用户不能为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            makeVideoCall(userName);
+        });
+
     }
 
     public void makeVoiceCall(String userName) {
         Intent intent = new Intent(MainActivity.this, VoiceCallActivity.class);
+        intent.putExtra("username", userName);
+        intent.putExtra("isComingCall", false);
+        startActivity(intent);
+    }
+
+    public void makeVideoCall(String userName) {
+        Intent intent = new Intent(MainActivity.this, VideoCallActivity.class);
         intent.putExtra("username", userName);
         intent.putExtra("isComingCall", false);
         startActivity(intent);
