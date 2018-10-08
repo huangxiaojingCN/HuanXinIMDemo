@@ -1,5 +1,6 @@
 package com.geek.huanxinimdemo;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -84,6 +85,7 @@ public class MainActivity extends EMBaseActivity implements BaseActivity.EMLogou
         });
 
         mVoice.setOnClickListener(view -> {
+            checkPermission(MainActivity.this, Manifest.permission.RECORD_AUDIO);
             String userName = mUserId.getText().toString();
             if (userName.isEmpty()) {
                 Toast.makeText(MainActivity.this, "聊天用户不能为空", Toast.LENGTH_SHORT).show();
@@ -94,6 +96,7 @@ public class MainActivity extends EMBaseActivity implements BaseActivity.EMLogou
 
 
         mVideo.setOnClickListener(view -> {
+            checkPermission(MainActivity.this, Manifest.permission.CAMERA);
             String userName = mUserId.getText().toString();
             if (userName.isEmpty()) {
                 Toast.makeText(MainActivity.this, "聊天用户不能为空", Toast.LENGTH_SHORT).show();
